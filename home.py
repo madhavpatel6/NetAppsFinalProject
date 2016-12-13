@@ -79,7 +79,7 @@ class MobileHelper:
         port = 1
         sock.connect(('B8:27:EB:F5:49:CC', port))
         for item in items:
-            sock.send(json.dumpbs(item))
+            sock.send(json.dumps(item))
         sock.send('{"end": 0}')
         sock.close()
 
@@ -97,11 +97,6 @@ class MobileHelper:
 
 def main():
     mh = MobileHelper()
-    mh.db.remove_all_items()
-    mh.db.add_item('onions', 5)
-    mh.db.add_item('potatoes', 7)
-    mh.db.add_item('bell peppers', 7)
-    mh.db.remove_item('potatoes', 4)
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
     # Establish a channel
     channel = connection.channel()
