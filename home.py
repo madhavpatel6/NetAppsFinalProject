@@ -70,7 +70,11 @@ class MobileHelper:
                                          "Accept": "application/json"}, params=payload)
         print(response.url)
         print(json.dumps(response.json(), indent=4, sort_keys=True))
-        return response.json()
+        steps = []
+        for s in response.json()[0]['steps']:
+            steps.append(s['step'])
+        print(steps)
+        return steps
 
     def get_price(self, name):
         response = requests.get('http://api.walmartlabs.com/v1/search?apiKey=bsgcpte3pz8wxqaspmnjrs5n&query={' + str(
