@@ -38,6 +38,9 @@ class MobileHelper:
             response = self.get_price(str(message['data']))
         elif message['type'] == 'pantry':
             response = self.db.get_all_items()
+        elif message['type'] == 'recipe':
+            if 'data' in message:
+                response = self.get_recipe(message['data'][0]['id'])
 
         ch.basic_publish(exchange='',
                          routing_key=str(props.reply_to),
@@ -57,7 +60,7 @@ class MobileHelper:
                                          "Accept": "application/json"}, params=payload)
         print(response.url)
         print(json.dumps(response.json(), indent=4, sort_keys=True))
-        return response
+        return response.json()
 
     def get_recipe(self, id):
         url = self.analyzed_recipe_end_point + str(id) + '/analyzedInstructions'
@@ -67,6 +70,7 @@ class MobileHelper:
                                          "Accept": "application/json"}, params=payload)
         print(response.url)
         print(json.dumps(response.json(), indent=4, sort_keys=True))
+        return response.json()
 
     def get_price(self, name):
         response = requests.get('http://api.walmartlabs.com/v1/search?apiKey=bsgcpte3pz8wxqaspmnjrs5n&query={' + str(
