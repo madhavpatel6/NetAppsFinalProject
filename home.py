@@ -97,6 +97,11 @@ class MobileHelper:
 
 def main():
     mh = MobileHelper()
+    mh.db.remove_all_items()
+    mh.db.add_item('onions', 5)
+    mh.db.add_item('potatoes', 7)
+    mh.db.add_item('bell peppers', 7)
+    mh.db.remove_item('potatoes', 4)
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
     # Establish a channel
     channel = connection.channel()
