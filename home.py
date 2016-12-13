@@ -71,6 +71,8 @@ class MobileHelper:
         print(response.url)
         print(json.dumps(response.json(), indent=4, sort_keys=True))
         steps = []
+        if len(response.json()) == 0:
+            return ['No steps found.']
         for s in response.json()[0]['steps']:
             steps.append(s['step'])
         print(steps)
