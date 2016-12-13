@@ -3,6 +3,7 @@ import pika
 import pickle
 import json
 import requests
+import time
 from bluetooth import *
 
 
@@ -14,13 +15,12 @@ class MobileHelper:
 
     def on_request(self, ch, method, props, body):
         response = []  # initialize response passed back to the bridge
-
         print('Message Received', body.decode('utf-8'))
         message = json.loads(body.decode('utf-8'))
         if 'type' not in message:
             response.append({'status':'BAD', 'error':'Invalid syntax. Message must contain a type and data key.'})
         elif message['type'] == 'recipes':
-            response = self.get_recipes(5, False)
+            response = self.get_recipes(20, False)
         elif message['type'] == 'remove':
             if 'data' in message:
                 for item in message['data']:
@@ -45,7 +45,7 @@ class MobileHelper:
         ch.basic_publish(exchange='',
                          routing_key=str(props.reply_to),
                          properties=pika.BasicProperties(correlation_id=props.correlation_id),
-                         body=pickle.dumps(response))
+                         body=(json.dumps(response)))
 
     def get_recipes(self, number, fill_ingredients):
         pantry = self.db.get_all_items()
@@ -81,11 +81,15 @@ class MobileHelper:
     def bluetoothSend(self, items):
         sock = BluetoothSocket(RFCOMM)
         port = 1
-        sock.connect(('B8:27:EB:F5:49:CC', port))
-        for item in items:
-            sock.send(json.dumps(item))
-        sock.send('{"end": 0}')
-        sock.close()
+        try:
+                sock.connect(('B8:27:EB:F5:49:CC', port))
+                for item in items:
+                    sock.send(json.dumps(item))
+                sock.send('{"end": 0}')
+                sock.close()
+        except btcommon.BluetoothError as error:
+                time.sleep(1)
+                self.bluetoothSend(items)
 
 '''def main():
     mh = MobileHelper()
@@ -101,6 +105,9 @@ class MobileHelper:
 
 def main():
     mh = MobileHelper()
+    mh.db.add_item('onions', 5)
+    mh.db.add_item('potatoes', 7)
+    mh.db.add_item('bell peppers', 7)
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
     # Establish a channel
     channel = connection.channel()

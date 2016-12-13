@@ -49,7 +49,6 @@ class DatabaseHelper:
             self.add_to_database({'name': str(name), 'quantity': int(value)})
         else:
             self.collection.update_one({'_id': old['_id']}, {'$inc': {'quantity': value}})
-            print("Successfully decremented the quantity of '" + name + "'")
 
     def remove_all_items(self):
         print("Removing all items from pantry")
