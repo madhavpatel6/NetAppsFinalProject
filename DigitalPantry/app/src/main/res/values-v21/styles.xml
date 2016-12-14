@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <style name="AppTheme.Base" parent="Theme.AppCompat.DayNight.DarkActionBar">
+                <!-- Customize your theme here. -->
+
+                <!-- colorPrimary is used for the default action bar background -->
+                <item name="colorPrimary">@android:color/holo_blue_dark</item>
+
+                <!-- colorPrimaryDark is used for the status bar -->
+                <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+
+                <!-- colorAccent is used as the default value for colorControlActivated
+                             which is used to tint widgets -->
+                <item name="colorAccent">@android:color/holo_green_dark</item>
+
+                <!-- You can also set colorControlNormal, colorControlActivated
+                             colorControlHighlight & colorSwitchThumbNormal. -->
+
+                <item name="android:windowBackground">@android:color/background_dark</item>
+                <item name="android:textColorPrimary">@android:color/primary_text_dark</item>
+                <item name="android:navigationBarColor">@android:color/holo_blue_dark</item>
+                <!-- Customize your theme here. -->
+
+                <item name="android:colorButtonNormal">@android:color/holo_green_dark</item>
+        </style>
+
+        <style name="DigitalPantry.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+</resources>

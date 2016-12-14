@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_shopping"
+            android:icon="@drawable/ic_checked"
+            android:title="Shopping List" />
+        <item
+            android:id="@+id/nav_pantry"
+            android:icon="@drawable/ic_checked"
+            android:title="Currently In Pantry" />
+        <item
+            android:id="@+id/nav_recipes"
+            android:icon="@drawable/ic_checked"
+            android:title="Recipes" />
+    </group>
+
+    <item android:title="Details">
+        <menu>
+            <item
+                android:id="@+id/nav_details"
+                android:icon="@drawable/ic_checked"
+                android:title="App Details" />
+        </menu>
+    </item>
+
+</menu>
