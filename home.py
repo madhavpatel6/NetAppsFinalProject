@@ -34,10 +34,13 @@ class MobileHelper:
                 for item in message['data']:
                     self.db.add_item(str(item['name']), int(item['quantity']))
                 response = self.db.get_all_items()
+            # call bluetooth function
+                self.bluetoothSend(response)
         elif message['type'] == 'price':
-            response = self.get_price(str(message['data']))
+            response = self.get_price(message['data'])
         elif message['type'] == 'pantry':
             response = self.db.get_all_items()
+            print(response)
         elif message['type'] == 'recipe':
             if 'data' in message:
                 response = self.get_recipe(message['data'][0]['id'])
@@ -79,10 +82,16 @@ class MobileHelper:
         return steps
 
     def get_price(self, name):
-        response = requests.get('http://api.walmartlabs.com/v1/search?apiKey=bsgcpte3pz8wxqaspmnjrs5n&query={' + str(
-            name) + '}&format=json')
-        print(json.dumps(response.json()['items'], indent=4, sort_keys=True))
-        return {'price': response.json()['items'][0]['salePrice']}
+        prices = []
+        for n in name:
+                print(n)
+                response = requests.get('http://api.walmartlabs.com/v1/search?apiKey=bsgcpte3pz8wxqaspmnjrs5n&query={' + n + '}&format=json')
+                for it in response.json()['items']:
+                        if 'salePrice' in it:
+                                prices.append(it['salePrice'])
+                                break
+        print(prices)
+        return prices
 
     def bluetoothSend(self, items):
         sock = BluetoothSocket(RFCOMM)
@@ -111,9 +120,7 @@ class MobileHelper:
 
 def main():
     mh = MobileHelper()
-    mh.db.add_item('onions', 5)
-    mh.db.add_item('potatoes', 7)
-    mh.db.add_item('bell peppers', 7)
+    mh.db.remove_all_items()
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
     # Establish a channel
     channel = connection.channel()
